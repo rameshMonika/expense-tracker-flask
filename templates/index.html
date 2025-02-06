@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Expense Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1 class="text-center">Expense Tracker</h1>
+
+    <h2>Add Expense</h2>
+    <form id="expenseForm" class="mb-3">
+      <input
+        type="text"
+        id="category"
+        name="category"
+        class="form-control"
+        placeholder="Category"
+        required
+      />
+      <input
+        type="number"
+        id="amount"
+        name="amount"
+        class="form-control mt-2"
+        placeholder="Amount"
+        required
+      />
+      <input
+        type="text"
+        id="description"
+        name="description"
+        class="form-control mt-2"
+        placeholder="Description"
+      />
+      <button type="submit" class="btn btn-primary mt-2">Add Expense</button>
+    </form>
+
+    <h2>Expenses</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="expenseList"></tbody>
+    </table>
+
+    <script>
+      function loadExpenses() {
+        fetch("/get_expenses")
+          .then((response) => response.json())
+          .then((data) => {
+            let rows = "";
+            for (let category in data.categories) {
+              data.categories[category].expenses.forEach((expense) => {
+                rows += `<tr>
+                                <td>${category}</td>
+                                <td>${expense.amount}</td>
+                                <td>${expense.description}</td>
+                                <td>
+                                    <button onclick="editExpense('${category}', '${expense.description}', ${expense.amount})" class="btn btn-warning">Edit</button>
+                                    <button onclick="deleteExpense('${category}', '${expense.description}')" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>`;
+              });
+            }
+            document.getElementById("expenseList").innerHTML = rows;
+          });
+      }
+
+      document.getElementById("expenseForm").onsubmit = function (event) {
+        event.preventDefault();
+        let formData = new FormData(event.target);
+        fetch("/add_expense", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message);
+            loadExpenses(); // Refresh the expense list
+          });
+      };
+
+      function editExpense(category, oldDescription, oldAmount) {
+        let newDescription = prompt("Edit description:", oldDescription);
+        let newAmount = prompt("Edit amount:", oldAmount);
+        if (newDescription && newAmount) {
+          let formData = new FormData();
+          formData.append("category", category);
+          formData.append("old_description", oldDescription);
+          formData.append("new_description", newDescription);
+          formData.append("new_amount", newAmount);
+
+          fetch("/edit_expense", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              alert(data.message);
+              loadExpenses(); // Refresh the expense list
+            });
+        }
+      }
+
+      function deleteExpense(category, description) {
+        if (confirm("Are you sure you want to delete this expense?")) {
+            let formData = new FormData();
+            formData.append("category", category);
+            formData.append("description", description);
+    
+            fetch("/delete_expense", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.message);
+                    loadExpenses(); // Refresh the expense list to show updated data
+                }
+            });
+        }
+    }
+    
+      loadExpenses(); // Load expenses on page load
+    </script>
+  </body>
+</html>

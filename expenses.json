@@ -1,0 +1,17 @@
+{
+    "categories": {
+        "sports": {
+            "limit": 100.0,
+            "expenses": [
+                {
+                    "amount": 80.0,
+                    "description": "sticker"
+                },
+                {
+                    "amount": 30.0,
+                    "description": "df"
+                }
+            ]
+        }
+    }
+}
