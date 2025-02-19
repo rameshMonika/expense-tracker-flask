@@ -1,90 +1,129 @@
+# Import necessary libraries
 from flask import Flask, request, render_template, jsonify
 import json
 import os
+import random  #  Random numbers
+import shutil  #  Copy files
+import math  #  Math functions
 
+# 🎞️ Variables & Multiple Assignments
+DATA_FILE, CATEGORY = "expenses.json", "sports"
+
+#  Create Flask App
 app = Flask(__name__)
-DATA_FILE = "expenses.json"
 
+#  File Detection & Handling
 def load_data():
-    if os.path.exists(DATA_FILE):
+    """Loads expense data from a JSON file or initializes it if not found."""
+    if os.path.exists(DATA_FILE):  # 📁 Check if file exists
         with open(DATA_FILE, "r") as file:
             return json.load(file)
-    return {"categories": {}}
+
+    return {"categories": {CATEGORY: {"expenses": []}}}
 
 def save_data(data):
+    """Saves expense data to a JSON file."""
     with open(DATA_FILE, "w") as file:
         json.dump(data, file, indent=4)
 
 @app.route("/")
 def index():
-    data = load_data()
-    return render_template("index.html", categories=data["categories"])
+    return render_template("index.html")
 
 @app.route("/get_expenses", methods=["GET"])
 def get_expenses():
+    """Returns all expenses under the 'sports' category."""
     data = load_data()
-    return jsonify(data)
+    return jsonify(data["categories"][CATEGORY]["expenses"])
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
+    """Adds a new expense."""
     data = load_data()
-    category = request.form.get("category")
+    
+    # User Input & Type Casting
     amount = request.form.get("amount")
-    description = request.form.get("description", "")
-    
-    if category not in data["categories"]:
-        return jsonify({"error": "Category does not exist"}), 404
-    
-    if not amount.isnumeric():
+    description = request.form.get("description", "").strip()
+
+    if not amount or not amount.isnumeric():
         return jsonify({"error": "Invalid expense amount"}), 400
     
-    amount = float(amount)
-    data["categories"][category]["expenses"].append({"amount": amount, "description": description})
+    amount = float(amount)  # 💱 Convert to float
+    
+    #  Lists & Append New Expense
+    data["categories"][CATEGORY]["expenses"].append({"amount": amount, "description": description})
     save_data(data)
+
     return jsonify({"message": "Expense added successfully"})
 
 @app.route("/edit_expense", methods=["POST"])
 def edit_expense():
+    """Edits an existing expense."""
     data = load_data()
-    category = request.form.get("category")
-    old_description = request.form.get("old_description")
-    new_description = request.form.get("new_description")
-    new_amount = request.form.get("new_amount")
     
-    if category not in data["categories"]:
-        return jsonify({"error": "Category does not exist"}), 404
-    
-    for expense in data["categories"][category]["expenses"]:
+    # 🔬 Variable Scope
+    old_description = request.form.get("old_description", "").strip()
+    new_description = request.form.get("new_description", "").strip()
+    new_amount = request.form.get("new_amount", "").strip()
+
+    expenses_list = data["categories"][CATEGORY]["expenses"]
+
+    # ➰ For Loop (Iterate through expenses)
+    for expense in expenses_list:
         if expense["description"] == old_description:
-            expense["description"] = new_description
-            expense["amount"] = float(new_amount)
+            #  String Slicing (Just an example)
+            expense["description"] = new_description[:50] if new_description else expense["description"]
+            expense["amount"] = float(new_amount) if new_amount.replace('.', '', 1).isdigit() else expense["amount"]
+
             save_data(data)
             return jsonify({"message": "Expense updated successfully"})
-    
+
     return jsonify({"error": "Expense not found"}), 404
 
 @app.route("/delete_expense", methods=["POST"])
 def delete_expense():
+    """Deletes an expense."""
     data = load_data()
-    category = request.form.get("category")
-    description = request.form.get("description")
+    description = request.form.get("description", "").strip()
 
-    if category not in data["categories"]:
-        return jsonify({"error": "Category does not exist"}), 404
+    expenses_list = data["categories"][CATEGORY]["expenses"]
+    
+    # 🎲 Random Number (Logging)
+    print(f"Deleting {description}, Confirmation ID: {random.randint(1000, 9999)}")
 
-    # Filter out only the selected expense
-    updated_expenses = [
-        exp for exp in data["categories"][category]["expenses"]
-        if exp["description"] != description
-    ]
+    updated_expenses = [exp for exp in expenses_list if exp["description"] != description]
 
-    if len(updated_expenses) == len(data["categories"][category]["expenses"]):
+    if len(updated_expenses) == len(expenses_list):
         return jsonify({"error": "Expense not found"}), 404
 
-    data["categories"][category]["expenses"] = updated_expenses
+    data["categories"][CATEGORY]["expenses"] = updated_expenses
     save_data(data)
 
     return jsonify({"message": "Expense deleted successfully"})
 
+#  Nested Function Calls & Return Statement
+def get_total_expense():
+    """Calculates total expense."""
+    return sum(expense["amount"] for expense in load_data()["categories"][CATEGORY]["expenses"])
+
+@app.route("/total", methods=["GET"])
+def total_expense():
+    """Returns the total expenses."""
+    return jsonify({"total": get_total_expense()})
+
+#  File Management Operations
+@app.route("/backup", methods=["GET"])
+def backup_file():
+    """Creates a backup of the expenses.json file."""
+    if os.path.exists(DATA_FILE):
+        shutil.copy(DATA_FILE, f"{DATA_FILE}.backup")
+        return jsonify({"message": "Backup created successfully."})
+    return jsonify({"error": "No file to back up."}), 404
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    # 📦 *args Example
+    def start_server(*args):
+        """Starts the Flask server."""
+        app.run(*args, debug=True)
+
+    start_server()

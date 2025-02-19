@@ -4,12 +4,12 @@
             "limit": 100.0,
             "expenses": [
                 {
-                    "amount": 80.0,
-                    "description": "sticker"
+                    "amount": 8088.0,
+                    "description": "stickerjo"
                 },
                 {
-                    "amount": 30.0,
-                    "description": "df"
+                    "amount": 140.0,
+                    "description": "gear"
                 }
             ]
         }
