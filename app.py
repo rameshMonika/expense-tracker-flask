@@ -48,8 +48,7 @@ def add_expense():
     if not amount or not amount.isnumeric():
         return jsonify({"error": "Invalid expense amount"}), 400
     
-    amount = float(amount)  # 💱 Convert to float
-    
+    amount = float(amount)  # 
     #  Lists & Append New Expense
     data["categories"][CATEGORY]["expenses"].append({"amount": amount, "description": description})
     save_data(data)
@@ -88,7 +87,7 @@ def delete_expense():
 
     expenses_list = data["categories"][CATEGORY]["expenses"]
     
-    # 🎲 Random Number (Logging)
+    # Random Number (Logging)
     print(f"Deleting {description}, Confirmation ID: {random.randint(1000, 9999)}")
 
     updated_expenses = [exp for exp in expenses_list if exp["description"] != description]
@@ -121,7 +120,7 @@ def backup_file():
     return jsonify({"error": "No file to back up."}), 404
 
 if __name__ == "__main__":
-    # 📦 *args Example
+
     def start_server(*args):
         """Starts the Flask server."""
         app.run(*args, debug=True)

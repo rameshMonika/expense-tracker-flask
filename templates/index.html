@@ -7,93 +7,271 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
-  <body class="container mt-5">
-    <h1 class="text-center">Expense Tracker</h1>
+  <style>
+    .row.text-center .col {
+      padding: 5px !important;
+    }
+    .category-card {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Centers items horizontally */
+      background-color: #ebd9f3;
+      border-radius: 50px;
+      padding: 10px 20px;
+      margin: 5px auto;
+      text-align: center; /* Ensures text alignment */
+      width: 70%; /* Ensures the div takes the full column width */
+    }
 
-    <h2>Add Expense</h2>
-    <form id="expenseForm" class="mb-3">
-      <input type="text" class="form-control" value="Sports" readonly />
-      <input
-        type="number"
-        id="amount"
-        class="form-control mt-2"
-        placeholder="Amount"
-        required
-      />
-      <input
-        type="text"
-        id="description"
-        class="form-control mt-2"
-        placeholder="Description"
-        required
-      />
-      <button type="submit" class="btn btn-primary mt-2">Add Expense</button>
-    </form>
+    .icon {
+      width: 2em;
+      height: 2em;
+      padding: 1.2em;
+      background-color: white;
+      border-radius: 50%; /* Makes it a circle */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0; /* Prevents shrinking */
+    }
 
-    <h2>Expenses</h2>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Amount</th>
-          <th>Description</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="expenseList"></tbody>
-    </table>
+    .icon i {
+      color: #5c5c5c;
+      font-size: 20px;
+    }
 
-    <!-- Edit Expense Modal -->
-    <div
-      class="modal fade"
-      id="editExpenseModal"
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Edit Expense</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
+    .category-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+      flex-grow: 1; /* Ensures the text expands within the div */
+      text-align: center; /* Align text to center */
+    }
+
+    .add-expense-btn {
+      width: 50px; /* Set a fixed width */
+      height: 50px; /* Set a fixed height */
+      border-radius: 50%; /* Make it a perfect circle */
+      display: flex;
+      align-items: center;
+      background-color: #4f4f4f !important;
+      justify-content: center;
+      font-size: 24px; /* Increase font size for better visibility */
+      padding: 0; /* Remove padding to keep it circular */
+    }
+
+    .card-body {
+     
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .card-text {
+      flex: 1;
+    }
+ 
+    .expense-cards {
+      width: 100%;
+    }
+    .btn {
+      border: none;
+      background: none;
+      color: #333;
+    }
+    .btn i {
+      font-size: 16px;
+    }
+    .expense-title {
+      margin-bottom: 15px; /* Add space below title */
+  }
+  
+  .card-title {
+      font-weight: normal; /* Ensure it’s not bold */
+      font-size: 1.5rem; /* Adjust size */
+  }
+  </style>
+
+  <body class="container-fluid">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary w-100">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Expense Tracker</span>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="container my-3">
+        <div class="row text-center">
+          <div class="col">
+            <div class="category-card">
+              <div class="icon">
+                <i class="fa-solid fa-baseball"></i>
+              </div>
+              <span class="category-name">Sports</span>
+            </div>
           </div>
-          <div class="modal-body">
-            <form id="editExpenseForm">
-              <input type="hidden" id="editOldDescription" />
-              <label class="form-label">Amount</label>
-              <input
-                type="number"
-                class="form-control"
-                id="editAmount"
-                required
-              />
-              <label class="form-label mt-2">Description</label>
-              <input
-                type="text"
-                class="form-control"
-                id="editDescription"
-                required
-              />
-            </form>
+          <div class="col">
+            <div class="category-card">
+              <div class="icon">
+                <i class="fa fa-cutlery" aria-hidden="true"></i>
+              </div>
+              <span class="category-name">Food</span>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="saveEditedExpense()"
-            >
-              Save Changes
-            </button>
+          <div class="col">
+            <div class="category-card">
+              <div class="icon">
+                <i class="fa fa-car" aria-hidden="true"></i>
+              </div>
+              <span class="category-name">Transportation</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="category-card">
+              <div class="icon">
+                <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+              </div>
+              <span class="category-name">Others</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container my-5 d-flex justify-content-end">
+        <button
+          class="btn btn-dark add-expense-btn"
+          data-bs-toggle="modal"
+          data-bs-target="#expenseModal"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="expenseModal"
+        tabindex="-1"
+        aria-labelledby="expenseModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="expenseModalLabel">Add Expense</h2>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form id="expenseForm">
+                <input
+                  type="text"
+                  class="form-control"
+                  value="Sports"
+                  readonly
+                />
+                <input
+                  type="number"
+                  id="amount"
+                  class="form-control mt-2"
+                  placeholder="Amount"
+                  required
+                />
+                <input
+                  type="text"
+                  id="description"
+                  class="form-control mt-2"
+                  placeholder="Description"
+                  required
+                />
+                <button type="submit" class="btn btn-primary mt-3 w-100">
+                  Add Expense
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-4">
+        <div class="d-flex justify-content-end">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="my-2 text-secondary">Sports Expense</h4> <!-- Grey title -->
+                        
+                        <!-- Separate div for expense list -->
+                        <div class="expense-list mt-3"> <!-- Added spacing -->
+                            <div id="expenseList" class="expense-cards w-100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+      <!-- Edit Expense Modal -->
+      <div
+        class="modal fade"
+        id="editExpenseModal"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Expense</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form id="editExpenseForm">
+                <input type="hidden" id="editOldDescription" />
+                <label class="form-label">Amount</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="editAmount"
+                  required
+                />
+                <label class="form-label mt-2">Description</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editDescription"
+                  required
+                />
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="saveEditedExpense()"
+              >
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -104,20 +282,32 @@
         fetch("/get_expenses")
           .then((response) => response.json())
           .then((data) => {
-            let rows = "";
+            let cards = "";
             data.forEach((expense) => {
-              rows += `<tr>
-                          <td>${expense.amount}</td>
-                          <td>${expense.description}</td>
-                          <td>
-                              <button onclick="editExpense('${expense.description}', ${expense.amount})" class="btn btn-warning">Edit</button>
-                              <button onclick="deleteExpense('${expense.description}')" class="btn btn-danger">Delete</button>
-                          </td>
-                      </tr>`;
+              cards += `
+                    <div class="card mb-2 w-100">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <p class="card-text mb-0">${expense.description}</p>
+                                <h5 class="card-title mb-0 ms-3">$${expense.amount}</h5>
+                            </div>
+                            <div>
+                               <button onclick="editExpense('${expense.description}', ${expense.amount})" class="btn btn-sm"
+                                style="background-color: #ebd9f3; color:#5c5c5c; border-radius: 50%; width: 32px; height: 32px;">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteExpense('${expense.description}')" class="btn btn-sm"
+                                style="background-color: #6c757d; color: white; border-radius: 50%; width: 32px; height: 32px;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+
+                            </div>
+                        </div>
+                    </div>`;
             });
-            document.getElementById("expenseList").innerHTML = rows;
+            document.getElementById("expenseList").innerHTML = cards;
           });
-      }
+    }
 
       document.getElementById("expenseForm").onsubmit = function (event) {
         event.preventDefault();
