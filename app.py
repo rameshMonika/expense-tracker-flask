@@ -12,14 +12,7 @@ DATA_FILE, CATEGORY = "expenses.json", "sports"
 #  Create Flask App
 app = Flask(__name__)
 
-#  File Detection & Handling
-def load_data():
-    """Loads expense data from a JSON file or initializes it if not found."""
-    if os.path.exists(DATA_FILE):  # 📁 Check if file exists
-        with open(DATA_FILE, "r") as file:
-            return json.load(file)
 
-    return {"categories": {CATEGORY: {"expenses": []}}}
 
 def save_data(data):
     """Saves expense data to a JSON file."""
@@ -30,11 +23,32 @@ def save_data(data):
 def index():
     return render_template("index.html")
 
+
 @app.route("/get_expenses", methods=["GET"])
 def get_expenses():
     """Returns all expenses under the 'sports' category."""
     data = load_data()
     return jsonify(data["categories"][CATEGORY]["expenses"])
+
+#  File Detection & Handling
+def load_data():
+    """Loads expense data from a JSON file or initializes it if not found."""
+    if os.path.exists(DATA_FILE): 
+        with open(DATA_FILE, "r") as file:
+            return json.load(file)
+
+    return {"categories": {CATEGORY: {"expenses": []}}}
+
+@app.route("/expense_summary", methods=["GET"])
+def expense_summary():
+    """Returns the limit and total expenses for the sports category."""
+    data = load_data()
+    category_data = data["categories"].get(CATEGORY, {})
+    
+    limit = category_data.get("limit", 0)
+    total = sum(expense["amount"] for expense in category_data.get("expenses", []))
+
+    return jsonify({"limit": limit, "total_expense": total})
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
@@ -100,15 +114,7 @@ def delete_expense():
 
     return jsonify({"message": "Expense deleted successfully"})
 
-#  Nested Function Calls & Return Statement
-def get_total_expense():
-    """Calculates total expense."""
-    return sum(expense["amount"] for expense in load_data()["categories"][CATEGORY]["expenses"])
 
-@app.route("/total", methods=["GET"])
-def total_expense():
-    """Returns the total expenses."""
-    return jsonify({"total": get_total_expense()})
 
 #  File Management Operations
 @app.route("/backup", methods=["GET"])

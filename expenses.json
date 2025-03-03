@@ -1,10 +1,10 @@
 {
     "categories": {
         "sports": {
-            "limit": 100.0,
+            "limit": 1000.0,
             "expenses": [
                 {
-                    "amount": 8088.0,
+                    "amount": 80.0,
                     "description": "stickerjo"
                 },
                 {
