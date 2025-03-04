@@ -105,10 +105,52 @@
     .expense-title {
       margin-bottom: 15px; /* Add space below title */
     }
+
+    .expense-list {
+      max-height: 15em; /* Limits height to fit approximately 3 items */
+      overflow-y: auto; /* Enables vertical scrolling */
+      padding-right: 5px; /* Adds space for the scrollbar */
+    }
+    
+    /* Customize scrollbar */
+    .expense-list::-webkit-scrollbar {
+      width: 8px; /* Slimmer scrollbar */
+    }
+    
+    .expense-list::-webkit-scrollbar-track {
+      background: #f1f1f1; /* Light gray track */
+      border-radius: 10px; /* Rounded corners */
+    }
+    
+    .expense-list::-webkit-scrollbar-thumb {
+      background: #6f6f71; /* Light purple for thumb */
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+    
+    .expense-list::-webkit-scrollbar-thumb:hover {
+      background: #2b2b2b; /* Darker purple on hover */
+    }
+
+    .expense-chart-container {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      height: 100%; /* Ensure it takes full height */
+    }
+    
+    
   
     .card-title {
       font-weight: normal; /* Ensure it’s not bold */
       font-size: 1.5rem; /* Adjust size */
+    }
+
+    .card.shadow {
+      height: 21em; /* Set both cards to equal height */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   </style>
 
@@ -227,10 +269,14 @@
               
                 <div class="col-md-6">
                   <h4 class="my-2 text-secondary">Expense vs Limit</h4>
-                  <canvas
+                  <div class="expense-chart-container">
+                    <canvas
                     id="expenseChart"
                    
                   ></canvas>
+
+                  </div>
+                 
                 </div>
               </div>
             </div>
