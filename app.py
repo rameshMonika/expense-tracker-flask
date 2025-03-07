@@ -46,12 +46,12 @@ def add_expense():
     """Adds a new expense (to be implemented)."""
     return jsonify({"message": "This endpoint will add an expense."})
 
-@app.route("/edit_expense", methods=["POST"])
+@app.route("/edit_expense", methods=["PUT"])
 def edit_expense():
     """Edits an existing expense (to be implemented)."""
     return jsonify({"message": "This endpoint will edit an expense."})
 
-@app.route("/delete_expense", methods=["POST"])
+@app.route("/delete_expense", methods=["DELETE"])
 def delete_expense():
     """Deletes an expense (to be implemented)."""
     return jsonify({"message": "This endpoint will delete an expense."})
