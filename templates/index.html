@@ -320,6 +320,7 @@
             <div class="modal-body">
               <form id="editExpenseForm">
                 <input type="hidden" id="editOldDescription" />
+                <input type="hidden" id="editOldAmount" />
                 <label class="form-label">Amount</label>
                 <input
                   type="number"
@@ -421,6 +422,10 @@
         formData.append(
           "old_description",
           document.getElementById("editOldDescription").value
+        );
+        formData.append(
+          "old_amount",
+          document.getElementById("editOldAmount").value
         );
         formData.append(
           "new_description",
