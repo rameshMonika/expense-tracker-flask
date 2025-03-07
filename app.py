@@ -69,7 +69,7 @@ def add_expense():
 
     return jsonify({"message": "Expense added successfully"})
 
-@app.route("/edit_expense", methods=["POST"])
+@app.route("/edit_expense", methods=["PUT"])
 def edit_expense():
     """Edits an existing expense."""
     data = load_data()
@@ -93,7 +93,7 @@ def edit_expense():
 
     return jsonify({"error": "Expense not found"}), 404
 
-@app.route("/delete_expense", methods=["POST"])
+@app.route("/delete_expense", methods=["DELETE"])
 def delete_expense():
     """Deletes an expense."""
     data = load_data()

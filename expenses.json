@@ -5,11 +5,7 @@
             "expenses": [
                 {
                     "amount": 80.0,
-                    "description": "stickerjo"
-                },
-                {
-                    "amount": 140.0,
-                    "description": "gear"
+                    "description": "sticker"
                 },
                 {
                     "amount": 45.0,
@@ -18,6 +14,10 @@
                 {
                     "amount": 23.0,
                     "description": "er"
+                },
+                {
+                    "amount": 45.0,
+                    "description": "gloves"
                 }
             ]
         }

@@ -431,7 +431,7 @@
           document.getElementById("editAmount").value
         );
 
-        fetch("/edit_expense", { method: "POST", body: formData })
+        fetch("/edit_expense", { method: "PUT", body: formData })
           .then((response) => response.json())
           .then((data) => {
             alert(data.message);
@@ -446,7 +446,7 @@
 
       function deleteExpense(description) {
         fetch("/delete_expense", {
-          method: "POST",
+          method: "DELETE",
           body: new URLSearchParams({ description }),
         })
           .then((response) => response.json())
