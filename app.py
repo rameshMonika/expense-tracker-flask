@@ -51,15 +51,23 @@ def add_expense():
     amount = request.form.get("amount")
     description = request.form.get("description", "").strip()
 
-    if not amount or not amount.isnumeric():
+    print(amount)
+
+    # Check if amount is a valid float
+    try:
+        amount = float(amount)
+        if amount < 0:  # Optional: Prevent negative values
+            return jsonify({"error": "Amount cannot be negative"}), 400
+    except ValueError:
+        print("Invalid expense amount")
         return jsonify({"error": "Invalid expense amount"}), 400
-   
-    amount = float(amount)  #
-    #  Lists & Append New Expense
+
+    # Append New Expense
     data["categories"][CATEGORY]["expenses"].append({"amount": amount, "description": description})
     save_data(data)
 
     return jsonify({"message": "Expense added successfully"})
+
 
 
 @app.route("/edit_expense", methods=["PUT"])
