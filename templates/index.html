@@ -459,14 +459,21 @@
       function deleteExpense(description) {
         fetch("/delete_expense", {
           method: "DELETE",
-          body: new URLSearchParams({ description }),
+          headers: {
+            "Content-Type": "application/json", // Ensure the correct content type
+          },
+          body: JSON.stringify({ description }), // Sending data as JSON
         })
           .then((response) => response.json())
           .then((data) => {
             alert(data.message);
             loadExpenses();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
           });
       }
+      
 
       function fetchExpenseSummary() {
         fetch("/expense_summary")
