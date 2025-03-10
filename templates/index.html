@@ -149,6 +149,21 @@
       flex-direction: column;
       justify-content: space-between;
     }
+
+    .delete-btn{
+      background-color: #6c757d !important;
+      color: white;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+    }
+
+    .btn-secondary{
+      background-color: #6c757d !important;
+      color: #fff;
+
+    }
+
   </style>
 
 
@@ -343,7 +358,7 @@
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                class="btn"
                 onclick="saveEditedExpense()"
               >
                 Save Changes
@@ -373,8 +388,8 @@
                                 style="background-color: #ebd9f3; color:#5c5c5c; border-radius: 50%; width: 32px; height: 32px;">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
-                            <button onclick="deleteExpense('${expense.description}')" class="btn btn-sm"
-                                style="background-color: #6c757d; color: white; border-radius: 50%; width: 32px; height: 32px;">
+                            <button onclick="deleteExpense('${expense.description}')" class="btn btn-sm delete-btn"
+                                >
                                 <i class="fa-solid fa-trash"></i>
                             </button>
 
