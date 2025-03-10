@@ -85,8 +85,8 @@ def edit_expense():
     for expense in expenses_list:
         if expense["description"] == old_description:
             #  String Slicing (Just an example)
-            expense["description"] = new_description[:50] if new_description else expense["description"]
-            expense["amount"] = float(new_amount) if new_amount.replace('.', '', 1).isdigit() else expense["amount"]
+            expense["description"] = new_description
+            expense["amount"] = float(new_amount) 
 
             save_data(data)
             return jsonify({"message": "Expense updated successfully"})
