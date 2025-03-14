@@ -5,19 +5,19 @@
             "expenses": [
                 {
                     "amount": 80.0,
-                    "description": "stickerjo"
+                    "description": "Basketball"
                 },
                 {
-                    "amount": 140.0,
-                    "description": "gear"
+                    "amount": 40.0,
+                    "description": "Helmet "
                 },
                 {
                     "amount": 45.0,
-                    "description": "df"
+                    "description": "Dumbbells "
                 },
                 {
-                    "amount": 23.0,
-                    "description": "er"
+                    "amount": 30.0,
+                    "description": "Exercise Mat"
                 }
             ]
         }
