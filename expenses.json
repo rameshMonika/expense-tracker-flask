@@ -1,25 +1,25 @@
 {
-    "categories": {
-        "sports": {
-            "limit": 1000.0,
-            "expenses": [
-                {
-                    "amount": 80.0,
-                    "description": "sticker"
-                },
-                {
-                    "amount": 45.0,
-                    "description": "df"
-                },
-                {
-                    "amount": 23.0,
-                    "description": "er"
-                },
-                {
-                    "amount": 45.0,
-                    "description": "gloves"
-                }
-            ]
+  "categories": {
+    "sports": {
+      "limit": 1000.0,
+      "expenses": [
+        {
+          "amount": 80.0,
+          "description": "Basketball"
+        },
+        {
+          "amount": 40.0,
+          "description": "Helmet "
+        },
+        {
+          "amount": 45.0,
+          "description": "Dumbbells "
+        },
+        {
+          "amount": 30.0,
+          "description": "Exercise Mat"
         }
+      ]
     }
+  }
 }
